@@ -36,7 +36,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
           <div className="flex flex-col">
             <span className="text-base sm:text-lg font-bold tracking-tight text-slate-900 leading-none">
-              MyNotes
+              MyNotes ✨
             </span>
             <span className="text-[10px] sm:text-[11px] text-slate-500 font-normal mt-0.5 hidden xs:inline-block">
               Personal notes
