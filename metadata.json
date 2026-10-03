@@ -1,0 +1,6 @@
+{
+  "name": "MyNotes",
+  "description": "A clean, simple personal notes application with local storage persistence, note creation, editing, and organization.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

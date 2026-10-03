@@ -1,0 +1,49 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =========================================================================
+    // Cloud Firestore Security Rules for MyNotes
+    // Database Structure: users/{userId}/notes/{noteId}
+    // =========================================================================
+
+    match /users/{userId}/notes/{noteId} {
+      
+      // 1. READ:
+      // A user can read (view or list) notes ONLY if:
+      // - They are authenticated (request.auth != null)
+      // - Their authenticated UID matches the {userId} in the document path
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      // 2. CREATE:
+      // A user can create a new note ONLY if:
+      // - They are authenticated (request.auth != null)
+      // - The note is created inside their own path (request.auth.uid == userId)
+      // - The data being saved includes their own userId (request.resource.data.userId == request.auth.uid)
+      allow create: if request.auth != null 
+                    && request.auth.uid == userId 
+                    && request.resource.data.userId == request.auth.uid;
+
+      // 3. UPDATE:
+      // A user can update an existing note ONLY if:
+      // - They are authenticated (request.auth != null)
+      // - The note belongs to their path (request.auth.uid == userId)
+      // - The userId field cannot be changed to another user's ID
+      allow update: if request.auth != null 
+                    && request.auth.uid == userId
+                    && request.resource.data.userId == request.auth.uid;
+
+      // 4. DELETE:
+      // A user can delete a note ONLY if:
+      // - They are authenticated (request.auth != null)
+      // - The note is inside their own path (request.auth.uid == userId)
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Default deny: Block access to any other collections or paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
